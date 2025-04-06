@@ -1,0 +1,51 @@
+{% extends 'reservation/base.html' %}
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <h2>View Clients</h2>
+        <table id="example" class="display">
+            <thead>
+                <tr>    
+                    <th scope="col" style="text-align:center">№</th>
+                    <th scope="col" style="text-align:center">Client Id</th>
+                    <th scope="col" style="text-align:center">Name</th>
+                    <th scope="col" style="text-align:center">Username</th>
+                    <th scope="col" style="text-align:center">Phone</th> 
+                    <th scope="col" style="text-align:center">Email</th>
+                    <th scope="col" style="text-align:center">Edit</th>
+                    <th scope="col" style="text-align:center">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in clients  %}
+                <tr>
+                    <td scope="row" style="text-align:center">{{ forloop.counter }}.</td>
+                    <td style="text-align:center">{{i.id}}</td>
+                    <td style="text-align:center">{{i.first_name}}</td>
+                    <td style="text-align:center">{{i.username}}</td>
+                    <td style="text-align:center">{{i.phone}}</td>
+                    <td style="text-align:center">{{i.email}}</td>
+                    <td style="text-align:center">
+                        <a href="{% url 'reservation:edit_client' i.id %}" class="button">Edit</a>
+                    </td>
+                    <td>
+                        <form action="{% url 'reservation:delete_client' i.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="button"
+                                onclick="return confirm(' Are you sure to delete?')">DELETE</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% endblock content %}

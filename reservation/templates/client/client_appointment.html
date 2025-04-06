@@ -1,0 +1,35 @@
+{% extends 'reservation/base.html' %}
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+{% block content %}
+<section>
+    <div class="container" style="margin: 0 auto; text-align: center;">
+        <h2>{{user.first_name}}, you can find all your reservation here!</h2>
+        <ul style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+        {% if bookings %}
+        {% for booking in bookings %}
+            <li style="list-style-type:none;">
+                <article style="width: 400px; padding: 20px; text-align: left;">
+                <div>
+                    <h3 style="color:#027fc1">{{ booking.service }}</h3>
+                    <hr>
+                    <p><strong>Specialist: </strong>{{ booking.specialist.first_name }}</p>
+                    <p><strong>Date: </strong>{{ booking.date }}</p>
+                    <p><strong>Time: </strong>{{ booking.time|time:"H:i" }}</p>
+                    <a href="{% url 'reservation:booking_detail' number=booking.id  %}" style="display: inline-block; margin-bottom: 20px;">Details</a>
+                </div>
+            </article>
+            </li>
+
+        {% endfor %}
+{% else %}
+<h3 >No appointments!</h3>
+{% endif %}
+        </ul>
+
+    </div>
+</section>
+{% endblock content %}

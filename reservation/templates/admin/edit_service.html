@@ -1,0 +1,38 @@
+{% extends 'reservation/base.html' %}
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+{% block content %}
+<section>
+<div class="container">
+<h2>Edit Information about Service</h2>
+<form action="{% url 'reservation:edit_service' service_id=service.id %}" method="POST">
+{% csrf_token %}
+
+<label for="title">Title</label>
+<input type="text" name="title" value="{{ service.title }}">
+
+<label for="desc">Dscription</label>
+<textarea name="desc" value="{{ service.description }}"></textarea>
+
+<label for="price">Price</label>
+<input type="number" name="price" value="{{ service.price }}">
+
+<label for="specialists">specialists:</label>
+<select name="specialists" multiple required>
+    {% for specialist in specialists %}
+        <option value="{{ specialist.id }}" {% if specialist in service.specialists.all %}selected{% endif %}>
+            {{ specialist.first_name }}{{ specialist.last_name }}
+        </option>
+    {% endfor %}
+</select>
+
+<button type="submit" class="button is-warning">Save</button>
+<a href="{% url 'reservation:services_list' %}" class="button">Cancel</a>
+</form>
+</div>
+</section>
+
+{% endblock content %}

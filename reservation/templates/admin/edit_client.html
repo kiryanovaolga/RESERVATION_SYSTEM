@@ -1,0 +1,29 @@
+{% extends 'reservation/base.html' %}
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+{% block content %}
+<section>
+<div class="container">
+<h2>Edit Information about Client</h2>
+<form action="{% url 'reservation:edit_client' client_id=client.id %}" method="POST">
+{% csrf_token %}
+
+<label for="first_name">First Name</label>
+<input type="text" name="first_name" value="{{ client.first_name }}">
+
+<label for="phone">Phone</label>
+<input type="tel" name="phone" value="{{ client.phone }}">
+
+<label for="email">Email</label>
+<input type="email" name="email" value="{{ client.email }}">
+
+<button type="submit" class="button is-warning">Save</button>
+<a href="{% url 'reservation:view_clients' %}" class="button">Cancel</a>
+</form>
+</div>
+</section>
+
+{% endblock content %}

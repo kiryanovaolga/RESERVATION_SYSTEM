@@ -1,0 +1,48 @@
+{% extends 'reservation/base.html' %}
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+{% block content %}
+<section>
+    <div class="container" style="margin: 0 auto; text-align: center;">
+        <h2>Choose a Date</h2>
+
+        <form action="{% url 'reservation:choose_datetime' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="specialist_id" value="{{ request.session.selected_specialist }}">
+
+            <label for="date">Select a Date</label>
+            <input type="date" name="date" id="date" value="{{min_day_value}}" min="{{min_day_value}}" required>
+            <button type="submit">Show Available Times</button>
+        </form>
+
+        {% if selected_date %}
+            <h2>Available Time for {{ selected_date|date:"Y-m-d" }}</h2>  
+            <form action="{% url 'reservation:confirm_booking' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="date" value="{{ selected_date|date:"Y-m-d" }}"> 
+                <input type="hidden" name="specialist_id" value="{{ request.session.selected_specialist }}"> 
+                <input type="hidden" name="service_id" value="{{ request.session.selected_service  }}"> 
+
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+                    {% for time in available_times %}
+                        <label>
+                            <input type="radio" name="time" value="{{ time }}" required>
+                            {{ time }}
+                        </label>
+                    {% endfor %}
+                </div>
+
+                {% if available_times %}
+                    <button type="submit">Confirm</button>
+                {% else %}
+                    <p>No available times for this date.</p>
+                {% endif %}
+            </form>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock content %}

@@ -1,0 +1,27 @@
+{% extends 'reservation/base.html' %}
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+{% block content %}
+<section>
+    <div class="container" style="margin: 0 auto; text-align: center;">
+        <h1>Our Team</h1>
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+            {% for specialist in specialists %}
+            <article style="max-width: 500px; width: 100%; padding: 20px; text-align: left;">
+                <div>
+                    <h3 style="color:#027fc1">{{ specialist.first_name }}</h3>
+                    <p><strong>Services:</strong>
+                        {% for service in specialist.services.all  %}
+                            {{ service.title }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <a href="#" style="display: inline-block; margin-bottom: 20px;">Read more</a>
+                </div>
+            </article>
+            {% endfor %}
+    </div>
+</section>
+{% endblock content %}

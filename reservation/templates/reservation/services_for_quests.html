@@ -1,0 +1,30 @@
+{% extends 'reservation/base.html' %}
+
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+<hr>
+{% block content %}
+<section class="home">
+    <div class="container">
+        <h1>Our Services</h1>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+            {% for service in services %}
+            <article style="max-width: 500px; padding: 20px; text-align: left; width: 100%;">
+                <div>
+                    <h3 style="color:#027fc1">{{ service.title }}</h3>
+                    <p>{{ service.description }}</p>
+                    <hr>
+                    <p><strong>Price:</strong> {{ service.price }} Kč</p>
+                    <a href="#" style="display: inline-block; margin-bottom: 20px;">Read more</a>
+                </div>
+            </article>
+            {% endfor %}
+    </div>
+</section>
+{% endblock content %}
+
+<hr>
+{% include 'reservation/footer.html' %}

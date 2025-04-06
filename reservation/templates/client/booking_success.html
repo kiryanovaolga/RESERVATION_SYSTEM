@@ -1,0 +1,16 @@
+{% extends 'reservation/base.html' %}
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+{% block content %}
+<section>
+    <div class="container" style="margin: 0 auto; text-align: center;">
+        <h2>Your Booking Confirm ✅</h2>
+        <p>Your appointment is scheduled successfully.</p>
+        <a href="{% url 'reservation:client_appointment' %}" class="button">Go to My Appointments</a>
+    </div>
+</section>
+
+{% endblock content %}

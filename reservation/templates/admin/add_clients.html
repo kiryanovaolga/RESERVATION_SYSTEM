@@ -1,0 +1,33 @@
+{% extends 'reservation/base.html' %}
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <h2>Add Clients</h2>
+        <form method="POST" action="{% url 'reservation:add_clients' %}">
+            {% csrf_token %}
+
+            <label for="first_name">First Name</label>
+            <input type="text" name="first_name" required>
+
+            <label for="phone">Phone</label>
+            <input type="tel" name="phone" required>
+
+            <label for="email">Email</label>
+            <input type="email" name="email">
+
+            <div class="buttons">
+                <button type="submit" class="button is-warning">Save</button>
+                <a href="{% url 'reservation:view_clients' %}">Cancel</a>
+
+            </div>
+        </form>
+
+    </div>
+</section>
+
+{% endblock content %}

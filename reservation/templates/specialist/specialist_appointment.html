@@ -1,0 +1,49 @@
+{% extends 'reservation/base.html' %}
+
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+{% block content %}
+<section>
+    <div class="container" style="margin: 0 auto; text-align: center;">
+        <h1>{{user.first_name}}, here are all your client appointments!</h1>
+
+        <form action="{% url 'reservation:specialist_appointment' %}" method="GET">
+            <label for="date">Choose a Date</label>
+            <input type="date" name="date" id="date" value="{{selected_date}}" min="{{min_day_value}}" required>
+            <button type="submit">Find client appointments</button>
+        </form>
+
+        <hr>
+
+        {% if bookings %}
+            <h3>Appointments for {{selected_date}}</h3>
+            <ul style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; list-style-type:none;">
+                {% for booking in bookings %}
+                    <li style="list-style-type:none;">
+                        <article style="width: 400px; padding: 20px; text-align: left;">
+                <div>
+                    <h3 style="color:#027fc1">{{ booking.service }}</h3>
+                    <hr>
+                    <p><strong>Time: </strong>{{ booking.time|time:"H:i" }}</p>
+                    <p><strong>Status: </strong >
+                        {% if booking.service_choices == 'canceled' %}
+                            <span style="color:red;">{{ booking.service_choices }}</span></p>
+                        {% elif booking.service_choices == 'upcoming' %}
+                            <span style="color:blue;">{{ booking.service_choices }}</span></p>
+
+                        {% endif %}
+                    <a href="{% url 'reservation:booking_detail_specialist' number=booking.id  %}" style="display: inline-block; margin-bottom: 20px;">Details</a>
+                </div>
+            </article>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No appointments for this day!</p>
+        {% endif %}
+    </div>
+</section>      
+{% endblock content %} 

@@ -1,0 +1,62 @@
+{% extends 'reservation/base.html' %}
+
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            <h2>{{booking.service}} Appointment's Detail </h2>
+            <hr>
+            <div style='font-size: 24px; margin-bottom: 40px;'>
+                <p><strong>Client: </strong>{{ booking.client.first_name }} {{ booking.client.last_name }}</p>
+                <p><strong>Date: </strong>{{ booking.date }}</p>
+                <p><strong>Time: </strong>{{ booking.time|time:"H:i" }}</p>
+                <p><strong>Status: </strong >
+                        {% if booking.service_choices == 'canceled' %}
+                            <span style="color:red;">{{ booking.service_choices }}</span></p>
+                        {% elif booking.service_choices == 'upcoming' %}
+                            <span style="color:blue;">{{ booking.service_choices }}</span></p>
+                        {% endif %}
+            </div>
+
+            <hr>
+            <div>
+                <h3 style="color:darkblue;">Messages:</h3>
+                {% for message in all_messages %}
+                    <div class="{% if message.sender == request.user %}message-you{% else %}message-other{% endif %}">
+                        <div>
+                            <small>{{ message.created_dt|date:"d M Y H:i" }}:</small>
+                            <strong>
+                                {% if message.sender == request.user %}
+                                    You:
+                                {% elif message.sender == booking.client %}
+                                    {{booking.client.first_name}}
+                                {% elif message.sender == booking.specialist %}
+                                    {{booking.specialist.first_name}}
+                                {% else %}
+                                    Unknown:
+                                {% endif %}
+                            </strong>
+                        </div>
+                        <p class="message-text">-{{ message.text }}</p>
+                    </div>
+                {% empty %}
+                    <p>No messages yet.</p>
+                {% endfor %}
+            </div>
+
+
+
+            <form style='max-width:50%' action="{% url 'reservation:booking_detail_specialist' number=booking.id  %}" method="POST">
+                {% csrf_token %}
+                <textarea name="message_text" placeholder='Your message to {{booking.client.first_name}}' required></textarea>
+                <button type="submit" style="width: 20%; padding: 10px;">Send</button>
+            </form>
+            <a href="{% url 'reservation:specialist_appointment' %}">Back to my appointments</a>
+
+        </div>
+    </section>      
+{% endblock content %}

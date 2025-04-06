@@ -1,0 +1,42 @@
+{% extends 'reservation/base.html' %}
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <h2>Clients who have appointments</h2>
+        {% if clients %}
+            <table id="example" class="display">
+                <thead>
+                    <tr>    
+                        <th scope="col" style="text-align:center">№</th>
+                        <th scope="col" style="text-align:center">Client Id</th>
+                        <th scope="col" style="text-align:center">Name</th>
+                        <th scope="col" style="text-align:center">Username</th>
+                        <th scope="col" style="text-align:center">Phone</th> 
+                        <th scope="col" style="text-align:center">Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                        <tr>
+                            <td scope="row" style="text-align:center">{{ forloop.counter }}.</td>
+                            <td style="text-align:center">{{ client.client__id }}</td>
+                            <td style="text-align:center">{{ client.client__first_name }}</td>
+                            <td style="text-align:center">{{ client.client__username }}</td>
+                            <td style="text-align:center">{{ client.client__phone }}</td>
+                            <td style="text-align:center">{{ client.client__email }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No Clients Yet</p>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock content %}

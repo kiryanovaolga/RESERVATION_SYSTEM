@@ -1,0 +1,129 @@
+<nav>
+    <ul>
+        <li><a href="{% url 'reservation:home' %}"><strong>AppointmentApp</strong></a></li>
+    </ul>
+    <ul>
+        <!-- Гостевой доступ -->
+        {% if not request.user.is_authenticated %}
+        <li><a href="{% url 'reservation:home' %}" class="secondary">Home</a></li>
+        <li><a href="{% url 'reservation:about' %}" class="secondary">About</a></li>
+        <li><a href="{% url 'reservation:services_view' %}" class="secondary">Services</a></li>
+        <li><a href="{% url 'reservation:team_view' %}" class="secondary">Our Team</a></li>
+        <li><a href="{% url 'reservation:login' %}" class="secondary">Login</a></li>
+        {% else %}
+
+
+        <!-- Главная страница для разных ролей -->
+        {% if request.user.is_staff %}
+        <li><a href="{% url 'reservation:admin_page' %}" class="secondary">Home</a></li>
+        {% elif request.user.role == 'client' %}
+        <li><a href="{% url 'reservation:client_page' %}" class="secondary">Services</a></li>
+        <li><a href="{% url 'reservation:about' %}" class="secondary">About</a></li>
+        <li><a href="{% url 'reservation:team_view' %}" class="secondary">Our Team</a></li>
+        {% elif request.user.role == 'specialist' %}
+        <li><a href="{% url 'reservation:specialist_page' %}" class="secondary">Home</a></li>
+        {% endif %}
+
+        <!-- Общие ссылки -->
+        <!-- <li><a href="{% url 'reservation:about' %}" class="secondary">About</a></li> -->
+        <!-- <li><a href="#!" class="secondary">Services</a></li>
+        <li><a href="#!" class="secondary">Our Team</a></li> -->
+        <li><a href="{% url 'reservation:contact' %}" class="secondary">Contacts</a></li>
+
+        <!-- Выпадающее меню для администратора -->
+        {% if request.user.is_staff %}
+        <li>
+            <details class="dropdown">
+                <summary>Clients</summary>
+                <ul dir="rtl">
+                    <li><a href="{% url 'reservation:view_clients' %}">View Clients</a></li>
+                    <li><a href="{% url 'reservation:add_clients' %}">Add Client</a></li>
+                </ul>
+            </details>
+        </li>
+        <li>
+            <details class="dropdown">
+                <summary>Appointments</summary>
+                <ul dir="rtl">
+                    <li><a href="{% url 'reservation:view_appointments' %}">View Appointments</a></li>
+                    <li><a href="#">Add Appointment</a></li>
+                </ul>
+            </details>
+        </li>
+        <li>
+            <details class="dropdown">
+                <summary>Services</summary>
+                <ul dir="rtl">
+                    <li><a href="{% url 'reservation:services_list' %}">View Services</a></li>
+                    <li><a href="{% url 'reservation:add_service' %}">Add Services </a></li>
+                </ul>
+            </details>
+        </li>
+        <li>
+            <details class="dropdown">
+                <summary>Specialists</summary>
+                <ul dir="rtl">
+                    <li><a href="{% url 'reservation:view_specialists' %}">View Specialists</a></li>
+                    <li><a href="{% url 'reservation:add_specialists' %}">Add Specialist</a></li>
+                </ul>
+            </details>
+        </li>
+        <li>
+            <details class="dropdown">
+                <summary>Account</summary>
+                <ul dir="rtl">
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="{% url 'reservation:logout' %}" class="secondary">Logout</a></li>
+                </ul>
+            </details>
+        </li>
+        {% endif %}
+
+        <!-- Выпадающее меню для клиентов -->
+        {% if request.user.role == 'client' and not request.user.is_staff %}
+        <li>
+            <details class="dropdown">
+                <summary>Account</summary>
+                <ul dir="rtl">
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="{% url 'reservation:client_appointment' %}">My Appointments</a></li>
+                    <li><a href="{% url 'reservation:logout' %}" class="secondary">Logout</a></li>
+                </ul>
+            </details>
+        </li>
+        {% endif %}
+
+        <!-- Выпадающее меню для специалистов -->
+        {% if request.user.role == 'specialist' and not request.user.is_staff %}
+        <li>
+            <details class="dropdown">
+                <summary>Appointments</summary>
+                <ul dir="rtl">
+                    <li><a href="{% url 'reservation:specialist_appointment' %}">View Appointments</a></li>
+                    <li><a href="#">Manage Appointments</a></li>
+                </ul>
+            </details>
+        </li>
+        <li>
+            <details class="dropdown">
+                <summary>Clients</summary>
+                <ul dir="rtl">
+                    <li><a href="{% url 'reservation:view_clients_for_specialist' %}">My Clients</a></li>
+                </ul>
+            </details>
+        </li>
+        <li>
+            <details class="dropdown">
+                <summary>Account</summary>
+                <ul dir="rtl">
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="{% url 'reservation:logout' %}" class="secondary">Logout</a></li>
+                </ul>
+            </details>
+        </li>
+        {% endif %}
+
+        <!-- Logout (для всех авторизованных пользователей) -->
+        {% endif %}
+    </ul>
+</nav>

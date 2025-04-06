@@ -1,0 +1,54 @@
+{% extends 'reservation/base.html' %}
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <h2>View Services</h2>
+        <table id="example" class="display">
+            <thead>
+                <tr>    
+                    <th style="text-align:center" scope="col">№</th>
+                    <th style="text-align:center" scope="col">Service Id</th>
+                    <th style="text-align:center" scope="col">Title</th>
+                    <th style="text-align:center" scope="col">Price</th>
+                    <th style="text-align:center" scope="col">Specialist</th>
+                    <th style="text-align:center" scope="col">Edit</th>
+                    <th style="text-align:center" scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                <tr>
+                    <td style="text-align:center" scope="row">{{ forloop.counter }}.</td>
+                    <td style="text-align:center">{{service.id}}</td>
+                    <td style="text-align:center">{{service.title}}</td>
+                    <td style="text-align:center">{{service.price}} Kč</td>
+                    <td style="text-align:center">
+                    {% for specialist in service.specialists.all %}
+                        {{ specialist.first_name }} {{ specialist.last_name }}{% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                            No specialists yet
+                    {% endfor %}</td>
+                    <td style="text-align:center">
+                        <a href="{% url 'reservation:edit_service' service.id %}" class="button">Edit</a>
+                    </td>
+                    <td style="text-align:center">
+                        <form action="{% url 'reservation:delete_service' service.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="button"
+                                onclick="return confirm(' Are you sure to delete?')">DELETE</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% endblock content %}

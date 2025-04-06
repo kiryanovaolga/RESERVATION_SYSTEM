@@ -1,0 +1,61 @@
+{% extends 'reservation/base.html' %}
+
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            <h1>{{user.first_name}}, here are all client's appointments!</h1>
+            <form action="{% url 'reservation:view_appointments' %}" method="POST">
+                {% csrf_token %}
+                <select name="specialist_id" id="specialist">
+                    <option value="">Choose specialist</option>
+                    {% for specialist in specialists %}
+                        <option value="{{specialist.id}}"  {% if specialist.id == selected_specialist %}selected{% endif %}>{{specialist.first_name}} {{specialist.last_name}}</option>
+                        
+                    {% endfor %}
+                </select>
+                <button type="submit">Filter</button>
+            </form>
+            {% if appointments %}
+                <h4>Apointments for specialist {{specialist.first_name}}</h4>
+                <ul style="display: flex; flex-wrap: wrap; justify-content: left; gap: 20px;">
+                    {% for appointment in appointments %}
+                        <li style="list-style-type:none;">
+                            <article style="width: 450px; padding: 20px; text-align: left;">
+                                <div>
+                                    <h3 style="color:#027fc1">{{ booking.service }}</h3>
+                                    <hr>
+                                    <p><strong>Service: </strong>{{ appointment.service}}</p>
+                                    <p><strong>Client: </strong>{{ appointment.client.first_name }} {{ appointment.client.last_name }}</p>
+                                    <p><strong>Date: </strong>{{ appointment.date }}</p>
+                                    <p><strong>Time: </strong>{{ appointment.time|time:"H:i" }}</p>
+                                    <p><strong>Created Time: </strong>{{ appointment.created_dt|date:"d M Y H:i" }}</p>
+                                    <p><strong>Status: </strong >
+                                    {% if appointment.service_choices == 'canceled' %}
+                                        <span style="color:red;">{{ appointment.service_choices  }}</span></p>
+                                    {% elif appointment.service_choices == 'upcoming' %}
+                                        <span style="color:blue;">{{ appointment.service_choices  }}</span></p>
+                                    {% elif appointment.service_choices == 'completed' %}
+                                        <span style="color:orange;">{{ appointment.service_choices  }}</span></p>
+                                    {% endif %} 
+                                    <form action="{% url 'reservation:delete_appointment' appointment.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name='appointment_id' value={{appointment.id}}>
+                                        <button type="submit" class="button"
+                                onclick="return confirm(' Are you sure to delete?')">DELETE</button>
+                                    </form>
+                                </div>
+                            </article>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No appointments!</p>
+            {% endif %}
+        </div>
+    </section>      
+{% endblock content %}

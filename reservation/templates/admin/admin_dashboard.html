@@ -1,0 +1,14 @@
+{% extends 'reservation/base.html' %}
+
+
+{% block nav %}
+{% include 'reservation/navigation.html' %}
+{% endblock nav %}
+
+{% block content %}
+<section class="home">
+    <div class="container">
+        <h1>Welcome back to your Admin Dashboard, {{user.first_name}}!</h1>
+    </div>
+</section>
+{% endblock content %}
